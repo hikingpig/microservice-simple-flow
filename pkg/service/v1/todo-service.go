@@ -3,14 +3,12 @@ package v1
 import (
 	"context"
 	"database/sql"
-	"fmt"
-	"time"
 
 	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/amsokol/go-grpc-http-rest-microservice-tutorial/pkg/api/v1"
+	"github.com/hikingpig/microservice-simple-flow/pkg/api/v1"
 )
 
 const (
@@ -28,18 +26,6 @@ func NewToDoServiceServer(db *sql.DB) v1.ToDoServiceServer {
 	return &toDoServiceServer{db: db}
 }
 
-// checkAPI checks if the API version requested by client is supported by server
-func (s *toDoServiceServer) checkAPI(api string) error {
-	// API version is "" means use current version of the service
-	if len(api) > 0 {
-		if apiVersion != api {
-			return status.Errorf(codes.Unimplemented,
-				"unsupported API version: service implements API version '%s', but asked for '%s'", apiVersion, api)
-		}
-	}
-	return nil
-}
-
 // connect returns SQL database connection from the pool
 func (s *toDoServiceServer) connect(ctx context.Context) (*sql.Conn, error) {
 	c, err := s.db.Conn(ctx)
@@ -51,10 +37,6 @@ func (s *toDoServiceServer) connect(ctx context.Context) (*sql.Conn, error) {
 
 // Create new todo task
 func (s *toDoServiceServer) Create(ctx context.Context, req *v1.CreateRequest) (*v1.CreateResponse, error) {
-	// check if the API version requested by client is supported by server
-	if err := s.checkAPI(req.Api); err != nil {
-		return nil, err
-	}
 
 	// get SQL connection from pool
 	c, err := s.connect(ctx)
@@ -86,5 +68,3 @@ func (s *toDoServiceServer) Create(ctx context.Context, req *v1.CreateRequest) (
 		Id:  id,
 	}, nil
 }
-
-
