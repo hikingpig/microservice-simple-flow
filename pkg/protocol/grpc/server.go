@@ -17,7 +17,8 @@ func RunServer(ctx context.Context, v1API v1.ToDoServiceServer, port string) err
 	// the real service is not registered yet
 	server := grpc.NewServer()
 	v1.RegisterToDoServiceServer(server, v1API)
-
+	// v1API is type for service. later we will pass it as a real service
+	// in the protobuf it is interface, but now it is real struct
 	log.Println("starting gRPC server...")
 	return server.Serve(listen)
 	//server.Server will start another goroutine

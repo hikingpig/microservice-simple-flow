@@ -9,7 +9,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/grpc"
 
-	"github.com/amsokol/go-grpc-http-rest-microservice-tutorial/pkg/api/v1"
+	"github.com/hikingpig/microservice-simple-flow/pkg/api/v1"
 )
 
 const (
@@ -44,6 +44,7 @@ func main() {
 			Reminder:    reminder,
 		},
 	}
+	log.Println("in client, req1", req1)
 	res1, _ := c.Create(ctx, &req1)
 	log.Printf("Create result: <%+v>\n\n", res1)
 }
