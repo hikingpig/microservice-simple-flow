@@ -1,0 +1,26 @@
+syntax = "proto3";
+package v1;
+
+import "google/protobuf/timestamp.proto";
+// this 's why we need third party
+
+message ToDo {
+  int64 id = 1;
+  string title = 2;
+  string description = 3;
+  google.protobuf.Timestamp reminder = 4;
+}
+
+message CreateRequest{
+  string api = 1;
+  ToDo toDo = 2;
+}
+
+message CreateResponse{
+  string api = 1;
+  int64 id = 2;
+}
+
+service ToDoService {
+  rpc Create(CreateRequest) returns (CreateResponse);
+}
